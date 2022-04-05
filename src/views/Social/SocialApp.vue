@@ -313,18 +313,6 @@
                     <template v-slot:headerTitle>
                       <h4 class="card-title">Education</h4>
                     </template>
-                    <template v-slot:headerAction>
-                      <b-dropdown id="dropdownMenuButton5" right variant="none">
-                        <template v-slot:button-content>
-                          <span class="text-primary">View All</span>
-                        </template>
-                        <b-dropdown-item href="#"><i class="ri-eye-fill mr-2"></i>View</b-dropdown-item>
-                        <b-dropdown-item href="#"><i class="ri-close-circle-line mr-2"></i>Delete</b-dropdown-item>
-                        <b-dropdown-item href="#"><i class="ri-pencil-fill mr-2"></i>Edit</b-dropdown-item>
-                        <b-dropdown-item href="#"><i class="ri-printer-fill mr-2"></i>Print</b-dropdown-item>
-                        <b-dropdown-item href="#"><i class="ri-file-download-fill mr-2"></i>Download</b-dropdown-item>
-                      </b-dropdown>
-                    </template>
                     <template v-slot:body>
                       <TimeLine :items="educationItems" />
                     </template>
@@ -422,14 +410,12 @@ export default {
       await axios.get(`https://bio.torre.co/api/bios/${this.$route.params.username}`, {
         headers: {}
       }).then(res => {
-        console.log('la info de Torre', res)
         this.torreInfo = res.data
         this.user.profile = this.torreInfo.person.pictureThumbnail
         this.user.name = this.torreInfo.person.name
         this.user.about = this.torreInfo.person.summaryOfBio
         this.user.location = this.torreInfo.person.location.shortName
         this.user.role = this.torreInfo.person.professionalHeadline
-        console.log('Los strenghts', this.torreInfo.strengths)
         this.user.skills = this.torreInfo.strengths
         this.user.languages = this.torreInfo.languages
         this.userFound = true
@@ -445,7 +431,6 @@ export default {
       }
     },
     classifySkills () {
-      console.log(this.user)
       for (let index = 0; index < this.user.skills.length; index++) {
         var currSkillProficiency = this.user.skills[index].proficiency
         switch (currSkillProficiency) {
@@ -471,9 +456,7 @@ export default {
     },
     getEducationArray () {
       this.educationItems = []
-      console.log('geting Education')
       for (let index = 0; index < this.torreInfo.education.length; index++) {
-        console.log('geting ', this.torreInfo.education[index])
         var currEducation = this.torreInfo.education[index]
         this.educationItems.push({
           color: 'success',
@@ -490,7 +473,6 @@ export default {
     },
     async getSkillModal (skill) {
       this.relatedPeople = []
-      console.log('getling Skill: ', skill)
       this.skillModal.skill = await skill
       this.findPeopleBySkill(skill)
       this.skillModal.status = true
@@ -507,10 +489,8 @@ export default {
           }
         }
       }).then((ans) => {
-        console.log(ans)
         people = ans.data.results
         for (let index = 0; index < people.length; index++) {
-          console.log('adding ', people[index])
           this.relatedPeople.push({
             name: people[index].name,
             role: people[index].professionalHeadline,
